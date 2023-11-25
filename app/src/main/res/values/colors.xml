@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorShimmer">#dddddd</color>
+
+    <!-- customizando netflix -->
+    <color name="branco">#FFFFFF</color>
+    <color name="preto">#000000</color>
+
+    <color name="primaria">#30B1E4</color>
+    <color name="primaria_variacao">#007CAC</color>
+    <color name="secundaria">#30B1E4</color>
+    <color name="fundo">#171417</color>
+    <color name="menu_navegacao">@color/branco</color>
 </resources>
