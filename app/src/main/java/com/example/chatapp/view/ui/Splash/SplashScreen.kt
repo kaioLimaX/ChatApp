@@ -1,15 +1,13 @@
-package com.example.chatapp.view.ui
+package com.example.chatapp.view.ui.Splash
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Window
 import android.view.WindowManager
-import com.example.chatapp.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.chatapp.databinding.ActivitySplashScreenBinding
+import com.example.chatapp.view.ui.auth.AuthActivity
 
 
 class SplashScreen : AppCompatActivity() {
@@ -29,7 +27,7 @@ class SplashScreen : AppCompatActivity() {
         )
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
