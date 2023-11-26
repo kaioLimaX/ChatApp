@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.chatapp.view.ui.auth.fragments.LoginInFragment
-import com.example.chatapp.view.ui.auth.fragments.SignInFragment
+import com.example.chatapp.view.ui.auth.fragments.SignUpFragment
 
 class TabAdapter(
     val abas : List<String>,
@@ -18,7 +18,7 @@ class TabAdapter(
 
     override fun createFragment(position: Int): Fragment {
         when(position){
-            1 -> return SignInFragment()
+            1 -> return SignUpFragment()
 
         }
         return LoginInFragment()

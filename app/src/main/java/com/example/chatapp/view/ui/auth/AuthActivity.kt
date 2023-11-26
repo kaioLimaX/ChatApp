@@ -24,7 +24,7 @@ class AuthActivity : AppCompatActivity() {
         val viewPager = binding.viewPagerMenuAuth
 
         //adapter
-        val abas = listOf("Login In", "Sign In")
+        val abas = listOf("Login In", "Sign Up")
         viewPager.adapter = TabAdapter(
             abas,
             supportFragmentManager,

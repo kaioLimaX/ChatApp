@@ -20,7 +20,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
-class SignInFragment : Fragment() {
+class SignUpFragment : Fragment() {
 
     private lateinit var binding: ItemTabloginSigninBinding
 
