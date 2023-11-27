@@ -7,7 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatapp.data.AuthRepository
 import com.example.chatapp.data.Resource
+import com.example.chatapp.view.ui.auth.fragments.ValidationResult
 import com.google.firebase.auth.FirebaseUser
+import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
+import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,9 +24,12 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _loginFlow = MutableLiveData<Resource<FirebaseUser>?>()
-
     val loginFlow: LiveData<Resource<FirebaseUser>?>
         get() = _loginFlow
+
+    private val _ValidateState = MutableLiveData<ValidationResult>()
+    val ValidateState: LiveData<ValidationResult>
+        get() = _ValidateState
 
     val currentUser: FirebaseUser?
         get() = authRepository.currentUser
@@ -34,7 +41,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun onClickLogin(
+    fun login(
         email: String,
         password: String
     ) = viewModelScope.launch {
@@ -42,6 +49,27 @@ class LoginViewModel @Inject constructor(
         val response = authRepository.login(email, password)
         _loginFlow.postValue(response)
         Log.i("info_response", "$_loginFlow")
+
+    }
+
+    fun validateField(email: String, password: String){
+        var emailValidate = email.validEmail() && email.nonEmpty()
+        var passwordValidate = password.minLength(6) && password.nonEmpty()
+
+        if(emailValidate){
+            if(passwordValidate){
+                login(email,password)
+
+
+            }else{
+                _ValidateState.postValue(ValidationResult.ErrorPassword("Enter a valid password"))
+
+            }
+
+        }else{
+            _ValidateState.postValue(ValidationResult.ErrorEmail("Enter a valid email"))
+
+        }
 
     }
 
