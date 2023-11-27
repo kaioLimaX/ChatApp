@@ -19,6 +19,7 @@ import com.example.chatapp.view.ui.auth.AuthActivity
 import com.example.chatapp.view.ui.auth.viewmodels.LoginViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.WithFragmentBindings
 import kotlinx.coroutines.flow.collect
@@ -32,7 +33,7 @@ class LoginInFragment : Fragment() {
 
     private lateinit var binding: ItemTabloginLoginBinding
 
-    private var fragmentBinding: ActivityAuthBinding? = null
+    private var authBinding: ActivityAuthBinding? = null
 
 
     override fun onCreateView(
@@ -41,22 +42,44 @@ class LoginInFragment : Fragment() {
     ): View? {
         binding = ItemTabloginLoginBinding.inflate(inflater, container, false)
 
-        fragmentBinding = (activity as? AuthActivity)?.binding
+        authBinding = (activity as? AuthActivity)?.binding
+
+        loginViewModel.ValidateState.observe(viewLifecycleOwner){
+            when(it){
+                is ValidationResult.ErrorEmail -> binding.inputLoginEmail.error = it.message
+                is ValidationResult.ErrorPassword -> {
+                    binding.inputLoginEmail.error = null
+                    binding.inputLoginSenha.error = it.message
+                }
+                ValidationResult.Success ->{} //empty
+            }
+
+        }
 
 
         loginViewModel.loginFlow.observe(viewLifecycleOwner) {
             with(binding) {
                 when (it) {
                     is Resource.Failure -> {
-                        toast("falha ao fazer login")
-                        fragmentBinding?.progressLogin?.visibility = View.GONE
+                    if(it.e.message!!.contains("There is no user record corresponding to this identifier")){
+
+                        val tab: TabLayout.Tab? = authBinding!!.tabAuth.getTabAt(1)
+
+                        if (tab != null) {
+                            tab.select() // Move para a segunda aba
+                        }
+                        toast("unregistered user, register now")
                     }
 
-                    is Resource.Loading -> fragmentBinding?.progressLogin?.visibility = View.VISIBLE
+                        Log.i("info_failure", "$it.e ")
+                        authBinding?.progressLogin?.visibility = View.GONE
+                    }
+
+                    is Resource.Loading -> authBinding?.progressLogin?.visibility = View.VISIBLE
 
                     is Resource.Sucess -> {
                         toast("sucesso ao fazer login")
-                        fragmentBinding?.progressLogin?.visibility = View.GONE
+                        authBinding?.progressLogin?.visibility = View.GONE
                     }
 
                     null -> toast("nulo")
@@ -68,7 +91,7 @@ class LoginInFragment : Fragment() {
             it.hideKeyboard()
             val email = binding.txtEmail.text.toString()
             val senha = binding.txtSenha.text.toString()
-            loginViewModel.onClickLogin(email, senha)
+            loginViewModel.validateField(email, senha)
 
         }
 
