@@ -4,8 +4,9 @@ import com.example.chatapp.data.utils.await
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
     override val currentUser: FirebaseUser?
@@ -38,6 +39,6 @@ class AuthRepositoryImpl(
     }
 
     override fun logout() {
-        TODO("Not yet implemented")
+        firebaseAuth.signOut()
     }
 }
