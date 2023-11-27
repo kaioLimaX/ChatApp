@@ -15,6 +15,7 @@ class SplashScreen : AppCompatActivity() {
     val binding by lazy {
         ActivitySplashScreenBinding.inflate(layoutInflater)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -33,7 +34,7 @@ class SplashScreen : AppCompatActivity() {
             finish()
 
 
-        },5000)
+        }, 5000)
 
     }
 }
