@@ -45,6 +45,10 @@ android {
 
 dependencies {
 
+    //lib Validation
+    val ev_version = "1.0.4"
+    implementation ("com.wajahatkarim:easyvalidation-core:$ev_version")
+
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
 
@@ -74,9 +78,12 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     //Dagger Hilt
-
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
+    implementation("androidx.hilt:hilt-work:1.1.0")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation ("com.airbnb.android:lottie:6.1.0")

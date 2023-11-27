@@ -17,6 +17,8 @@ import com.example.chatapp.databinding.ActivityAuthBinding
 import com.example.chatapp.databinding.ItemTabloginLoginBinding
 import com.example.chatapp.view.ui.auth.AuthActivity
 import com.example.chatapp.view.ui.auth.viewmodels.LoginViewModel
+import com.example.chatapp.view.ui.main.MainActivity
+import com.example.chatapp.view.ui.utils.ActivityUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
@@ -78,7 +80,7 @@ class LoginInFragment : Fragment() {
                     is Resource.Loading -> authBinding?.progressLogin?.visibility = View.VISIBLE
 
                     is Resource.Sucess -> {
-                        toast("sucesso ao fazer login")
+                        ActivityUtils.goToActivity(requireContext(), MainActivity::class.java)
                         authBinding?.progressLogin?.visibility = View.GONE
                     }
 

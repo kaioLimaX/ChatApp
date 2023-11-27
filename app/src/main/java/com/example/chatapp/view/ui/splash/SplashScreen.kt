@@ -1,4 +1,4 @@
-package com.example.chatapp.view.ui.Splash
+package com.example.chatapp.view.ui.splash
 
 import android.content.Intent
 import android.os.Bundle

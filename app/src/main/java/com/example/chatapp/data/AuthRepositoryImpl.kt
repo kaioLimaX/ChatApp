@@ -14,10 +14,10 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
         return try {
-            val result  = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             Resource.Sucess(result.user!!)
 
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(e)
 
@@ -25,13 +25,19 @@ class AuthRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun signup(email: String, password: String,name: String): Resource<FirebaseUser> {
+    override suspend fun signup(
+        email: String,
+        password: String,
+        name: String
+    ): Resource<FirebaseUser> {
         return try {
-            val result  = firebaseAuth.createUserWithEmailAndPassword(email,password).await()
-            result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            result?.user?.updateProfile(
+                UserProfileChangeRequest.Builder().setDisplayName(name).build()
+            )
             Resource.Sucess(result.user!!)
 
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(e)
 
