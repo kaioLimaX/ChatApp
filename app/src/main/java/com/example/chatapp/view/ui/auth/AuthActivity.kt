@@ -6,7 +6,9 @@ import com.example.chatapp.R
 import com.example.chatapp.adapters.TabAdapter
 import com.example.chatapp.databinding.ActivityAuthBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 
     val binding by lazy{
