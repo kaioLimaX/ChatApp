@@ -10,22 +10,28 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.chatapp.data.Resource
 import com.example.chatapp.databinding.ItemTabloginLoginBinding
 import com.example.chatapp.view.ui.auth.AuthActivity
+import com.example.chatapp.view.ui.auth.viewmodels.LoginViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.WithFragmentBindings
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.observeOn
 
-
+@AndroidEntryPoint
+@WithFragmentBindings
 class LoginInFragment : Fragment() {
+
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var binding: ItemTabloginLoginBinding
 
     private var mainBinding: com.example.chatapp.databinding.ActivityAuthBinding? = null
-
-
-    private val autenticacao by lazy {
-        FirebaseAuth.getInstance()
-    }
 
 
     override fun onCreateView(
@@ -36,6 +42,18 @@ class LoginInFragment : Fragment() {
 
         mainBinding = (activity as? AuthActivity)?.binding
 
+        loginViewModel.loginFlow.value.let {
+            when (it){
+                is Resource.Failure -> toast("falha")
+                Resource.Loading -> toast("carregando")
+                is Resource.Sucess -> toast("sucesso")
+                null -> null
+            }
+        }
+
+
+
+
         return binding.getRoot()
     }
 
@@ -43,12 +61,22 @@ class LoginInFragment : Fragment() {
         super.onStart()
         binding.btnLogar.setOnClickListener {
             it.hideKeyboard()
-            logarUsuario()
+            //logarUsuario()
+            val email = binding.txtEmail.text.toString()
+            val senha = binding.txtSenha.text.toString()
+            loginViewModel.onClickLogin(email,senha)
+
         }
+
+
 
     }
 
-    private fun logarUsuario() {
+    fun toast (message: String){
+        Toast.makeText(requireContext(), "$message", Toast.LENGTH_SHORT).show()
+    }
+
+/*    private fun logarUsuario() {
 
        // mainBinding?.pbLoading?.visibility = View.VISIBLE
         binding.inputLoginSenha.setError(null);
@@ -69,8 +97,8 @@ class LoginInFragment : Fragment() {
                verificarUsuarioLogado()
            }.addOnFailureListener { exception ->
                //binding.textView.text = "erro: ${exception.message}"
-               /*mainBinding?.pbLoading?.visibility = View.INVISIBLE
-               Log.i("info_app", "logarUsuario: ${exception.message}")*/
+               *//*mainBinding?.pbLoading?.visibility = View.INVISIBLE
+               Log.i("info_app", "logarUsuario: ${exception.message}")*//*
 
                if(exception.message == "The password is invalid or the user does not have a password."){
                    binding.inputLoginSenha.error = "Senha invalida"
@@ -87,7 +115,7 @@ class LoginInFragment : Fragment() {
 
            }
        }
-    }
+    }*/
 
     private fun exibirMensagem(texto: String) {
         Toast.makeText(binding.btnLogar.context, texto, Toast.LENGTH_LONG).show()
@@ -95,7 +123,7 @@ class LoginInFragment : Fragment() {
 
     }
 
-    private fun verificarUsuarioLogado() {
+/*    private fun verificarUsuarioLogado() {
         val usuario = autenticacao.currentUser
         val id = usuario?.uid
 
@@ -130,7 +158,7 @@ class LoginInFragment : Fragment() {
 
 
 
-    }
+    }*/
 
     fun View.hideKeyboard() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
