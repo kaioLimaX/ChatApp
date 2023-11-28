@@ -50,10 +50,11 @@ class LoginInFragment : Fragment() {
             when(it){
                 is ValidationResult.ErrorEmail -> binding.inputLoginEmail.error = it.message
                 is ValidationResult.ErrorPassword -> {
-                    binding.inputLoginEmail.error = null
+                    binding.inputLoginEmail.isErrorEnabled = false
                     binding.inputLoginSenha.error = it.message
                 }
-                ValidationResult.Success ->{} //empty
+                is ValidationResult.ErrorName -> {}
+
             }
 
         }
@@ -73,7 +74,7 @@ class LoginInFragment : Fragment() {
                         toast("unregistered user, register now")
                     }
 
-                        Log.i("info_failure", "$it.e ")
+                        Log.i("info_auth", "Failure: ${it.e} ")
                         authBinding?.progressLogin?.visibility = View.GONE
                     }
 
@@ -82,6 +83,7 @@ class LoginInFragment : Fragment() {
                     is Resource.Sucess -> {
                         ActivityUtils.goToActivity(requireContext(), MainActivity::class.java)
                         authBinding?.progressLogin?.visibility = View.GONE
+                        Log.i("info_auth", "Sucess: ${it.result.uid} ")
                     }
 
                     null -> toast("nulo")
@@ -106,29 +108,6 @@ class LoginInFragment : Fragment() {
     fun toast(message: String) {
         Toast.makeText(requireContext(), "$message", Toast.LENGTH_SHORT).show()
     }
-
-    /*
-        private fun validarCampos(email: String, senha: String): Boolean {
-            val formatoEmail = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-            if (email.isNotEmpty() && formatoEmail) {
-                if (senha.isNotEmpty() && senha.length >= 8) {
-                    return true
-
-                } else {
-                    binding.inputLoginSenha.error = "insira um senha mais forte"
-                 //   mainBinding?.pbLoading?.visibility = View.INVISIBLE
-                    return false
-                }
-
-            } else {
-                binding.inputLoginEmail.error = "insira um email valido"
-               // mainBinding?.pbLoading?.visibility = View.INVISIBLE
-                return false
-            }
-
-
-
-        }*/
 
     fun View.hideKeyboard() {
         val inputManager =
