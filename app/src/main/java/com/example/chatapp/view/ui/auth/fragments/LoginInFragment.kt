@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.example.chatapp.databinding.ActivityAuthBinding
 import com.example.chatapp.databinding.ItemTabloginLoginBinding
 import com.example.chatapp.view.ui.auth.AuthActivity
+import com.example.chatapp.view.ui.auth.AuthConstants
 import com.example.chatapp.view.ui.auth.utils.AuthFlow
 import com.example.chatapp.view.ui.auth.utils.ValidationResult
 import com.example.chatapp.view.ui.auth.viewmodel.AuthViewModel
@@ -38,12 +39,12 @@ class LoginInFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = ItemTabloginLoginBinding.inflate(inflater, container, false)
 
         authBinding = (activity as? AuthActivity)?.binding
 
-        authViewModel.ValidateState.observe(viewLifecycleOwner){
+        authViewModel.validateState.observe(viewLifecycleOwner){
             when(it){
                 is ValidationResult.ErrorEmail -> binding.inputLoginEmail.error = it.message
                 is ValidationResult.ErrorPassword -> {
@@ -56,27 +57,19 @@ class LoginInFragment : Fragment() {
 
         }
 
-        authViewModel.selectedTabIndex.observe(viewLifecycleOwner){
-
-            val tab: TabLayout.Tab? = authBinding!!.tabAuth.getTabAt(it)
-
-            if (tab != null) {
-                tab.select()
-            }
-        }
-
 
         authViewModel.authFlow.observe(viewLifecycleOwner) {
             with(binding) {
                 when (it) {
                     is AuthFlow.Failure -> {
                         hideProgressBar(authBinding!!.progressLogin)
-                        toast(it.e)
+                        toast(AuthConstants.msgErrorLogin)
                     }
                     AuthFlow.Loading -> showProgressBar(authBinding!!.progressLogin)
                     AuthFlow.Success -> {
                         hideProgressBar(authBinding!!.progressLogin)
                         ActivityUtils.goToActivity(requireContext(), MainActivity::class.java)
+                        requireActivity().finish()
                     }
                 }
             }
@@ -113,7 +106,7 @@ class LoginInFragment : Fragment() {
     }
 
     fun toast(message: String) {
-        Toast.makeText(requireContext(), "$message", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showProgressBar(progressBar: ProgressBar) {

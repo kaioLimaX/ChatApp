@@ -27,17 +27,9 @@ class AuthViewModel @Inject constructor(
     val authFlow: LiveData<AuthFlow>
         get() = _authFlow
 
-    private val _ValidateState = MutableLiveData<ValidationResult>()
-    val ValidateState: LiveData<ValidationResult>
-        get() = _ValidateState
-
-    private val _ProgressBarState = MutableLiveData<Boolean>()
-    val ProgressBarState: LiveData<Boolean>
-        get() = _ProgressBarState
-
-    private val _toastMessage = MutableLiveData<String>()
-    val toastMessage: LiveData<String>
-        get() = _toastMessage
+    private val _validateState = MutableLiveData<ValidationResult>()
+    val validateState: LiveData<ValidationResult>
+        get() = _validateState
 
     val currentUser: FirebaseUser?
         get() = authRepository.currentUser
@@ -62,11 +54,7 @@ class AuthViewModel @Inject constructor(
         val response = authRepository.login(email, password)
         when (response) {
             is Resource.Failure -> {
-                _authFlow.value = AuthFlow.Failure("${response.e}")
-                if ("${response.e}".contains("There is no user record corresponding to this identifier")) {
-                    _selectedTabIndex.value = 1
-                    _toastMessage.value = "user does not exist,register now!"
-                }
+                _authFlow.value = AuthFlow.Failure(response.e)
                 Log.i("info_auth", "Failure: ${response.e} ")
             }
 
@@ -76,7 +64,7 @@ class AuthViewModel @Inject constructor(
 
             }
         }
-        Log.i("info_response", "$_authFlow")
+
 
     }
 
@@ -89,22 +77,22 @@ class AuthViewModel @Inject constructor(
         val response = authRepository.signup(email, password, name)
         when (response) {
             is Resource.Failure -> {
-                _authFlow.postValue(AuthFlow.Failure("${response.e}"))
+                Log.i("info_auth", "Failure: ${response.e} ")
+                _authFlow.postValue(AuthFlow.Failure(response.e))
             }
 
             is Resource.Sucess -> {
-                _ProgressBarState.postValue(false)
                 _authFlow.postValue(AuthFlow.Success)
+                Log.i("info_auth", "Sucess: ${response.result.uid} ")
             }
         }
-        //_signupFlow.postValue(response)
-        //   Log.i("info_response", "$_signupFlow")
+
 
     }
 
     fun validateField(email: String, password: String) {
-        var emailValidate = email.validEmail() && email.nonEmpty()
-        var passwordValidate = password.minLength(6) && password.nonEmpty()
+        val emailValidate = email.validEmail() && email.nonEmpty()
+        val passwordValidate = password.minLength(6) && password.nonEmpty()
 
         if (emailValidate) {
             if (passwordValidate) {
@@ -112,20 +100,20 @@ class AuthViewModel @Inject constructor(
 
 
             } else {
-                _ValidateState.postValue(ValidationResult.ErrorPassword("Enter a valid password"))
+                _validateState.postValue(ValidationResult.ErrorPassword("Enter a valid password"))
 
             }
 
         } else {
-            _ValidateState.postValue(ValidationResult.ErrorEmail("Enter a valid email"))
+            _validateState.postValue(ValidationResult.ErrorEmail("Enter a valid email"))
 
         }
 
     }
 
     fun validateField(email: String, password: String, name: String) {
-        var emailValidate = email.validEmail() && email.nonEmpty()
-        var passwordValidate = password.minLength(6) && password.nonEmpty()
+        val emailValidate = email.validEmail() && email.nonEmpty()
+        val passwordValidate = password.minLength(6) && password.nonEmpty()
         val nameValidate = name.nonEmpty() && name.minLength(4)
 
         if (nameValidate) {
@@ -135,25 +123,19 @@ class AuthViewModel @Inject constructor(
 
 
                 } else {
-                    _ValidateState.postValue(ValidationResult.ErrorPassword("Enter a valid password"))
+                    _validateState.postValue(ValidationResult.ErrorPassword("Enter a valid password"))
 
                 }
 
             } else {
-                _ValidateState.postValue(ValidationResult.ErrorEmail("Enter a valid email"))
+                _validateState.postValue(ValidationResult.ErrorEmail("Enter a valid email"))
 
             }
 
         } else {
-            _ValidateState.postValue(ValidationResult.ErrorName("Enter a valid name"))
+            _validateState.postValue(ValidationResult.ErrorName("Enter a valid name"))
         }
     }
-
-    fun showToast(message: String) {
-        _toastMessage.value = message
-    }
-
-    // Resetar a mensagem após exibir o toast
 
 
 }

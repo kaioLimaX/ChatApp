@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 
 class ActivityUtils {
 
@@ -13,27 +14,18 @@ class ActivityUtils {
             val intent = Intent(context, activityClass)
             context.startActivity(intent)
         }
-        fun goToActivity(context: Context, activityClass: Class<*>,condition: Boolean) {
-            val intent = Intent(context, activityClass)
-            context.startActivity(intent)
-            if (context is Activity) {
-                context.finish()
-            }
 
-        }
         fun goToActivity(context: Context,activityClass: Class<*>, extras: Bundle? = null) {
             val intent = Intent(context, activityClass)
 
-            // Adiciona os extras à intent, se fornecidos
+            // extras intent
             if (extras != null) {
                 intent.putExtras(extras)
             }
 
-            context.startActivity(intent)
 
-            if (context is Activity) {
-                context.finish()
-            }
         }
+
+        }
+
     }
-}

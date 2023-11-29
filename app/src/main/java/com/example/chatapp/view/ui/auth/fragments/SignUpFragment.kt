@@ -39,12 +39,12 @@ class SignUpFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = ItemTabloginSignupBinding.inflate(inflater, container, false)
 
         authBinding = (activity as? AuthActivity)?.binding
 
-        authViewModel.ValidateState.observe(viewLifecycleOwner){
+        authViewModel.validateState.observe(viewLifecycleOwner){
             when(it){
                 is ValidationResult.ErrorEmail -> {
                     binding.inputNome.isErrorEnabled = false
@@ -65,17 +65,16 @@ class SignUpFragment : Fragment() {
 
 
         authViewModel.authFlow.observe(viewLifecycleOwner) {
-            with(binding) {
-                when (it) {
-                    is AuthFlow.Failure -> {
-                        hideProgressBar(authBinding!!.progressLogin)
-                        toast(it.e)
-                    }
-                    AuthFlow.Loading -> showProgressBar(authBinding!!.progressLogin)
-                    AuthFlow.Success -> {
-                        hideProgressBar(authBinding!!.progressLogin)
-                        ActivityUtils.goToActivity(requireContext(), MainActivity::class.java)
-                    }
+            when (it) {
+                is AuthFlow.Failure -> {
+                    hideProgressBar(authBinding!!.progressLogin)
+                    toast(it.e.message.toString())
+                }
+                AuthFlow.Loading -> showProgressBar(authBinding!!.progressLogin)
+                AuthFlow.Success -> {
+                    hideProgressBar(authBinding!!.progressLogin)
+                    ActivityUtils.goToActivity(requireContext(), MainActivity::class.java)
+                    requireActivity().finish()
                 }
             }
         }
@@ -84,9 +83,9 @@ class SignUpFragment : Fragment() {
             it.hideKeyboard()
             val name = binding.txtNome.text.toString()
             val email = binding.txtEmail.text.toString()
-            val senha = binding.txtSenha.text.toString()
+            val password = binding.txtSenha.text.toString()
 
-            authViewModel.validateField(email, senha,name)
+            authViewModel.validateField(email, password,name)
 
         }
 
@@ -102,15 +101,15 @@ class SignUpFragment : Fragment() {
 
 
 
-        return binding.getRoot()
+        return binding.root
     }
 
 
-    fun toast(message: String) {
-        Toast.makeText(requireContext(), "$message", Toast.LENGTH_SHORT).show()
+    private fun toast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    fun View.hideKeyboard() {
+    private fun View.hideKeyboard() {
         val inputManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
@@ -124,7 +123,7 @@ class SignUpFragment : Fragment() {
         progressBar.visibility = View.GONE
     }
 
-    fun cleanError(textInputLayout: TextInputLayout){
+    private fun cleanError(textInputLayout: TextInputLayout){
         textInputLayout.isErrorEnabled = false
     }
 

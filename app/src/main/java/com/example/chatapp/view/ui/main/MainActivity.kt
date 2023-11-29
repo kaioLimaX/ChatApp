@@ -1,9 +1,12 @@
 package com.example.chatapp.view.ui.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.chatapp.R
 import com.example.chatapp.databinding.ActivityMainBinding
+import com.example.chatapp.view.ui.auth.AuthActivity
+import com.example.chatapp.view.ui.main.utils.ActivityUtils
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.button.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            finish()
+            ActivityUtils.goToActivity(this,AuthActivity::class.java)
         }
 
 
