@@ -5,5 +5,5 @@ import java.lang.Exception
 sealed class Resource<out T> {
     data class Sucess<out T>(val result: T): Resource<T>()
     data class Failure(val e: Exception): Resource<Nothing>()
-    object Loading: Resource<Nothing>()
+
 }

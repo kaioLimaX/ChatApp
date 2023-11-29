@@ -2,22 +2,22 @@ package com.example.chatapp.view.ui.auth.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.chatapp.data.Resource
 import com.example.chatapp.databinding.ActivityAuthBinding
 import com.example.chatapp.databinding.ItemTabloginSignupBinding
 import com.example.chatapp.view.ui.auth.AuthActivity
-import com.example.chatapp.view.ui.auth.viewmodels.SignUpViewModel
+import com.example.chatapp.view.ui.auth.utils.AuthFlow
+import com.example.chatapp.view.ui.auth.utils.ValidationResult
+import com.example.chatapp.view.ui.auth.viewmodel.AuthViewModel
 import com.example.chatapp.view.ui.main.MainActivity
-import com.example.chatapp.view.ui.utils.ActivityUtils
-import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
+import com.example.chatapp.view.ui.main.utils.ActivityUtils
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.WithFragmentBindings
 
@@ -26,7 +26,8 @@ import dagger.hilt.android.WithFragmentBindings
 @WithFragmentBindings
 class SignUpFragment : Fragment() {
 
-    private val signupViewModel: SignUpViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
+
 
     private lateinit var binding: ItemTabloginSignupBinding
 
@@ -41,7 +42,7 @@ class SignUpFragment : Fragment() {
 
         authBinding = (activity as? AuthActivity)?.binding
 
-        signupViewModel.ValidateState.observe(viewLifecycleOwner){
+        authViewModel.ValidateState.observe(viewLifecycleOwner){
             when(it){
                 is ValidationResult.ErrorEmail -> {
                     binding.inputNome.isErrorEnabled = false
@@ -61,29 +62,18 @@ class SignUpFragment : Fragment() {
         }
 
 
-        signupViewModel.signupFlow.observe(viewLifecycleOwner) {
+        authViewModel.authFlow.observe(viewLifecycleOwner) {
             with(binding) {
                 when (it) {
-                    is Resource.Failure -> {
-                        if(it.e.message!!.contains("The email address is already in use by another account")){
-                            binding.inputNome.isErrorEnabled = false
-                            binding.inputemail.error = "The email address is already in use"
-                            //empty
-                        }
-
-                        Log.i("info_auth", "Failure: ${it.e} ")
-                        authBinding?.progressLogin?.visibility = View.GONE
+                    is AuthFlow.Failure -> {
+                        hideProgressBar(authBinding!!.progressLogin)
+                        toast(it.e)
                     }
-
-                    is Resource.Loading -> authBinding?.progressLogin?.visibility = View.VISIBLE
-
-                    is Resource.Sucess -> {
+                    AuthFlow.Loading -> showProgressBar(authBinding!!.progressLogin)
+                    AuthFlow.Success -> {
+                        hideProgressBar(authBinding!!.progressLogin)
                         ActivityUtils.goToActivity(requireContext(), MainActivity::class.java)
-                        authBinding?.progressLogin?.visibility = View.GONE
-                        Log.i("info_auth", "Sucess: ${it.result.uid} ")
                     }
-
-                    null -> toast("nulo")
                 }
             }
         }
@@ -94,7 +84,7 @@ class SignUpFragment : Fragment() {
             val email = binding.txtEmail.text.toString()
             val senha = binding.txtSenha.text.toString()
 
-            signupViewModel.validateField(email, senha,name)
+            authViewModel.validateField(email, senha,name)
 
         }
 
@@ -112,6 +102,14 @@ class SignUpFragment : Fragment() {
         val inputManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    private fun showProgressBar(progressBar: ProgressBar) {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar(progressBar: ProgressBar) {
+        progressBar.visibility = View.GONE
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.chatapp.view.ui.utils
+package com.example.chatapp.view.ui.main.utils
 
 import android.content.Context
 import android.content.Intent

@@ -1,74 +1,26 @@
 {
   "project_info": {
-    "project_number": "826508847490",
-    "firebase_url": "https://watsappclone-4a7e6-default-rtdb.firebaseio.com",
-    "project_id": "watsappclone-4a7e6",
-    "storage_bucket": "watsappclone-4a7e6.appspot.com"
+    "project_number": "44439631771",
+    "project_id": "appchat-c8545",
+    "storage_bucket": "appchat-c8545.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:826508847490:android:23bff7640ab6e4f19f879b",
+        "mobilesdk_app_id": "1:44439631771:android:942f959075eb4f5631933e",
         "android_client_info": {
           "package_name": "com.example.chatapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "826508847490-bh1diubvglv9trb3cumd5bam95ss2ug6.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD1Z5VhqBS_YoARYBDZ8o74gpJT4XZ95Uk"
+          "current_key": "AIzaSyBBAcEDdSIm1bNJQ6hVEvDfBuEiz4qYbog"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "826508847490-bh1diubvglv9trb3cumd5bam95ss2ug6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:826508847490:android:59733cb7aa48f7739f879b",
-        "android_client_info": {
-          "package_name": "com.skydevices.watsappclone"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "826508847490-240pct1j3k4131l8qn21o0b5465sn93p.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.skydevices.watsappclone",
-            "certificate_hash": "4f545a05635676945fbe479fe6c61b0335824a22"
-          }
-        },
-        {
-          "client_id": "826508847490-bh1diubvglv9trb3cumd5bam95ss2ug6.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD1Z5VhqBS_YoARYBDZ8o74gpJT4XZ95Uk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "826508847490-bh1diubvglv9trb3cumd5bam95ss2ug6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

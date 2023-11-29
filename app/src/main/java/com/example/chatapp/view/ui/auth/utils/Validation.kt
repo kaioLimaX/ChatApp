@@ -1,6 +1,4 @@
-package com.example.chatapp.view.ui.auth.fragments
-
-import java.lang.Exception
+package com.example.chatapp.view.ui.auth.utils
 
 sealed class ValidationResult {
     data class ErrorEmail(val message: String) : ValidationResult()
