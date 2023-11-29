@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.chatapp.databinding.ActivityAuthBinding
@@ -18,6 +19,7 @@ import com.example.chatapp.view.ui.auth.utils.ValidationResult
 import com.example.chatapp.view.ui.auth.viewmodel.AuthViewModel
 import com.example.chatapp.view.ui.main.MainActivity
 import com.example.chatapp.view.ui.main.utils.ActivityUtils
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.WithFragmentBindings
 
@@ -88,6 +90,16 @@ class SignUpFragment : Fragment() {
 
         }
 
+        binding.txtNome.addTextChangedListener {
+            cleanError(binding.inputNome)
+        }
+        binding.txtEmail.addTextChangedListener {
+            cleanError(binding.inputemail)
+        }
+        binding.txtSenha.addTextChangedListener {
+            cleanError(binding.inputSenha)
+        }
+
 
 
         return binding.getRoot()
@@ -110,6 +122,10 @@ class SignUpFragment : Fragment() {
 
     private fun hideProgressBar(progressBar: ProgressBar) {
         progressBar.visibility = View.GONE
+    }
+
+    fun cleanError(textInputLayout: TextInputLayout){
+        textInputLayout.isErrorEnabled = false
     }
 
 
