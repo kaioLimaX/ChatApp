@@ -60,10 +60,10 @@ class AuthViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _authFlow.value = AuthFlow.Loading
         val response = authRepository.login(email, password)
-        when(response){
+        when (response) {
             is Resource.Failure -> {
                 _authFlow.value = AuthFlow.Failure("${response.e}")
-                if("${response.e}".contains("There is no user record corresponding to this identifier")){
+                if ("${response.e}".contains("There is no user record corresponding to this identifier")) {
                     _selectedTabIndex.value = 1
                     _toastMessage.value = "user does not exist,register now!"
                 }
@@ -87,17 +87,18 @@ class AuthViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _authFlow.postValue(AuthFlow.Loading)
         val response = authRepository.signup(email, password, name)
-        when(response){
+        when (response) {
             is Resource.Failure -> {
                 _authFlow.postValue(AuthFlow.Failure("${response.e}"))
             }
+
             is Resource.Sucess -> {
                 _ProgressBarState.postValue(false)
                 _authFlow.postValue(AuthFlow.Success)
             }
         }
         //_signupFlow.postValue(response)
-     //   Log.i("info_response", "$_signupFlow")
+        //   Log.i("info_response", "$_signupFlow")
 
     }
 
@@ -153,7 +154,6 @@ class AuthViewModel @Inject constructor(
     }
 
     // Resetar a mensagem após exibir o toast
-
 
 
 }
